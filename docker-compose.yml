@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  proxy:
+    image: alpine:3.15
+    ports:
+      - "2222:2222"
+    volumes:
+      - ./tcp-tcp:/tmp/tcp-tcp:ro
+    entrypoint: ''
+    command: /tmp/tcp-tcp opencanary:22 0.0.0.0:2222
+    networks:
+      - internal
+      - default
+
+  opencanary:
+    image: thinkst/opencanary:latest
+    container_name: opencanary
+    restart: unless-stopped
+    entrypoint: ''
+    command: bash -c 'echo KG9wZW5jYW5hcnlkIC0tY29weWNvbmZpZzsgc2VkIC1pICdzL1wuZW5hYmxlZCI6XHMqZmFsc2UvLmVuYWJsZWQiOiB0cnVlL2cnIC9ldGMvb3BlbmNhbmFyeWQvb3BlbmNhbmFyeS5jb25mOyBlY2hvIDEuIE9LICYpOyBzbGVlcCA1czsgZWNobyAyLiBSVU47IG9wZW5jYW5hcnlkIC0tZGV2Cg== | base64 -d | bash'
+    networks:
+      - internal
+
+networks:
+    internal:
+        internal: true
